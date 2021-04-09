@@ -51,7 +51,7 @@ function createPlayer(player, data) {
 
   // !!  $character
   let $character = document.createElement('div');
-  $character.classList.add('$character');
+  $character.classList.add('character');
   $player1.appendChild($character);
 
   // !!! $img
