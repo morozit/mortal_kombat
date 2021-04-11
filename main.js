@@ -1,64 +1,125 @@
-const $playerIcon = {
+// ----------------DOM---------------------------
+const $arenas = document.querySelector('.arenas');
+const $randomButton = document.querySelector('.button');
+
+// ----------------Object------------------------
+const playerIcon = {
   scorpion: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
   kitana: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
   liukang: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
   sonya: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
   subzero: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
+  orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 }
 
-const player_1 = {
-  name: 'Самурай',
-  hp: '50%',
-  img: $playerIcon.scorpion,
+const PLAYER_1 = {
+  player: 1,
+  name: 'sonya',
+  hp: 100,
+  img: playerIcon.sonya,
   weapon: ['катана'],
   attack: () => {
-    return console.log(`${player_1.name} Fight...`);
+    return console.log(`${PLAYER_1.name} Fight...`);
   },
 }
 
-const player_2 = {
-  name: 'Гладітор',
-  hp: '100%',
-  img: $playerIcon.liukang,
+const PLAYER_2 = {
+  player: 2,
+  name: 'orco',
+  hp: 100,
+  img: playerIcon.orco,
   weapon: ['трезубец'],
   attack: () => {
-    return console.log(`${player_2.name} Fight...`);
+    return console.log(`${PLAYER_2.name} Fight...`);
   },
 }
 
-function createPlayer(player, data) {
-  // ! $player1
-  let $player1 = document.createElement('div');
-  $player1.classList.add(player);
-  document.querySelector('.arenas').appendChild($player1);
+// --------------Function-------------------------
 
-  // !!  $progressbar
-  let $progressbar = document.createElement('div');
-  $progressbar.classList.add('progressbar');
-  $player1.appendChild($progressbar);
+function createElement (tag, className) {
+  let $tag = document.createElement(tag);
+  $tag.classList.add(className);
+  if (className) {
+    $tag.classList.add(className);
+  }
 
-  // !!! $life
-  let $life = document.createElement('div');
-  $life.classList.add('life');
-  $life.style.width = data.hp;
-  $progressbar.appendChild($life);
-
-  // !!! $name
-  let $name = document.createElement('div');
-  $name.classList.add('name');
-  $name.innerHTML = data.name;
-  $progressbar.appendChild($name);
-
-  // !!  $character
-  let $character = document.createElement('div');
-  $character.classList.add('$character');
-  $player1.appendChild($character);
-
-  // !!! $img
-  let $img = document.createElement('img');
-  $img.src = data.img;
-  $character.appendChild($img);  
+  return $tag;
 }
 
-createPlayer('player1', player_1);
-createPlayer('player2', player_2);
+function createPlayer(data) {
+  // ! createElement
+  let $player = createElement('div', `player${data.player}`);
+  let $progressbar = createElement('div', 'progressbar');
+  let $life = createElement('div', 'life');
+  let $name = createElement('div', 'name');
+  let $character = createElement('div', 'character');
+  let $img = createElement('img');
+  
+  // !!! style
+  $life.style.width = `${data.hp}%`;
+    
+  // !!!! inerHTML
+  $name.innerHTML = data.name;
+  $img.src = data.img;
+
+  // !!! appendChild
+  $progressbar.appendChild($life);
+  $progressbar.appendChild($name);
+  
+  $character.appendChild($img);
+
+  $player.appendChild($character);
+  $player.appendChild($progressbar);
+
+  return $player;
+}
+
+function changeHP(playerHP) {
+  let $playerLife = document.querySelector(`.player${playerHP.player} .life`);
+
+  playerHP.hp -= random(20);
+  playerHP.hp <= 0 ?  $playerLife.style.width = '0%' : $playerLife.style.width = `${playerHP.hp}%`;
+
+  console.log(playerHP.hp);
+  if (playerHP.hp <= 0) {
+    $randomButton.disabled = true
+
+    // console.log(playerWins());
+    $arenas.appendChild(createWinPlayerTag(playerWins()));
+    
+  }
+  return playerHP.name
+}
+
+const random = (num) => {
+  console.log('RANDOM', Math.ceil(Math.random() * num));
+  return Math.ceil(Math.random() * num);
+
+};
+
+function playerWins () {
+  if (PLAYER_1.hp > PLAYER_2.hp) {
+    return PLAYER_1.name;
+  }
+  if (PLAYER_1.hp < PLAYER_2.hp) {
+    return PLAYER_2.name;
+  }
+  return
+}
+
+function createWinPlayerTag(name) {
+  let $winTitle = createElement('div', 'winTitle');
+  $winTitle.innerHTML = `${name} wins!!!` ;
+  return $winTitle;
+}
+
+
+// ------------addEventListener------------------
+$randomButton.addEventListener('click', () => {
+  changeHP(PLAYER_1);
+  changeHP(PLAYER_2);
+});
+
+
+$arenas.appendChild(createPlayer(PLAYER_1));
+$arenas.appendChild(createPlayer(PLAYER_2));
