@@ -76,7 +76,7 @@ function createPlayer(data) {
 
 function changeHP(playerHP) {
   let $playerLife = document.querySelector(`.player${playerHP.player} .life`);
-  playerHP.hp -= random(20);
+  playerHP.hp -= getRandom(20);
 
   if (playerHP.hp <= 0) {
     playerHP.hp = 0;
@@ -88,7 +88,7 @@ function changeHP(playerHP) {
   return playerHP.name
 }
 
-const random = (num) => {
+function getRandom (num) {
   return Math.ceil(Math.random() * num);
 }
 
