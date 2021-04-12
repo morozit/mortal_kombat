@@ -18,6 +18,9 @@ const obj_PLAYER_1 = {
   hp: 100,
   img: playerIcon.sonya,
   weapon: ['катана'],
+  changeHP,
+  renderHP,
+  elHP,
   attack: () => {
     return console.log(`${obj_PLAYER_1.name} Fight...`);
   },
@@ -29,6 +32,9 @@ const obj_PLAYER_2 = {
   hp: 100,
   img: playerIcon.orco,
   weapon: ['трезубец'],
+  changeHP,
+  renderHP,
+  elHP,
   attack: () => {
     return console.log(`${obj_PLAYER_2.name} Fight...`);
   },
@@ -74,18 +80,27 @@ function createPlayer(data) {
   return $player;
 }
 
-function changeHP(playerHP) {
-  let $playerLife = document.querySelector(`.player${playerHP.player} .life`);
-  playerHP.hp -= getRandom(20);
+function changeHP(lostLife) {
+  console.log(`%c${this.name} -${lostLife}hp`, 'color: #ffffff; background-color: #CD0E03; padding: 4px 50px; font-size: 12px;');
 
-  if (playerHP.hp <= 0) {
-    playerHP.hp = 0;
+  this.hp -= lostLife;
+  if (this.hp <= 0) {
+    this.hp = 0;
   }
-  // !!!!! LOG-----------
-  console.log(`${playerHP.name}-♥`, playerHP.hp);
-  // !!!!!---------------
-  $playerLife.style.width = `${playerHP.hp}%`
-  return playerHP.name
+
+
+  console.log(`%c${this.name} ${this.hp}-♥`, 'color: #ffffff; background-color: #4CAF50; padding: 4px 50px; font-size: 12px;');
+}
+
+function elHP() {
+  let $playerLife = document.querySelector(`.player${this.player} .life`);
+  return $playerLife;
+} 
+
+function renderHP() {
+  this.elHP().style.width = `${this.hp}%`
+  console.log();
+  return this.name
 }
 
 function getRandom (num) {
@@ -106,8 +121,12 @@ if (name) {
 
 // ------------addEventListener------------------
 $randomButton.addEventListener('click', () => {
-  changeHP(obj_PLAYER_1);
-  changeHP(obj_PLAYER_2);
+  // changeHP(obj_PLAYER_1);
+  // changeHP(obj_PLAYER_2);
+  obj_PLAYER_1.changeHP(getRandom(20));
+  obj_PLAYER_2.changeHP(getRandom(20));
+  obj_PLAYER_1.renderHP();
+  obj_PLAYER_2.renderHP();
 
   if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
     $randomButton.disabled = true;
