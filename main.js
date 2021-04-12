@@ -12,25 +12,25 @@ const playerIcon = {
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 };
 
-const PLAYER_1 = {
+const obj_PLAYER_1 = {
   player: 1,
   name: 'sonya',
   hp: 100,
   img: playerIcon.sonya,
   weapon: ['катана'],
   attack: () => {
-    return console.log(`${PLAYER_1.name} Fight...`);
+    return console.log(`${obj_PLAYER_1.name} Fight...`);
   },
 };
 
-const PLAYER_2 = {
+const obj_PLAYER_2 = {
   player: 2,
   name: 'orco',
   hp: 100,
   img: playerIcon.orco,
   weapon: ['трезубец'],
   attack: () => {
-    return console.log(`${PLAYER_2.name} Fight...`);
+    return console.log(`${obj_PLAYER_2.name} Fight...`);
   },
 };
 
@@ -76,67 +76,52 @@ function createPlayer(data) {
 
 function changeHP(playerHP) {
   let $playerLife = document.querySelector(`.player${playerHP.player} .life`);
-
   playerHP.hp -= random(20);
-  
-  playerHP.hp <= 0 ? playerHP.hp = 0 : playerHP.hp;
-  $playerLife.style.width = `${playerHP.hp}%`
-
-  console.log(`${playerHP.name}-♥`, playerHP.hp);
 
   if (playerHP.hp <= 0) {
-    $randomButton.disabled = true
-
-    // console.log('function', playerWins(PLAYER_1, PLAYER_2));
-    $arenas.appendChild(createWinPlayerTag(playerWins(PLAYER_1, PLAYER_2)));
-    // $arenas.appendChild(createWinPlayerTag(playerWins()));
+    playerHP.hp = 0;
   }
+  // !!!!! LOG-----------
+  console.log(`${playerHP.name}-♥`, playerHP.hp);
+  // !!!!!---------------
+  $playerLife.style.width = `${playerHP.hp}%`
   return playerHP.name
 }
 
 const random = (num) => {
-  console.log('RANDOM', Math.ceil(Math.random() * num));
   return Math.ceil(Math.random() * num);
-};
-
-function playerWins (p1, p2) {
-  if (p1.hp === p2.hp) {
-    return `ничья`;
-  }
-  
-  if (p1.hp > p2.hp) {
-    return p1.name;
-  }
-  if (p1.hp < p2.hp) {
-    return p2.name;
-  }
-
-  return
 }
 
-// function playerWins () {
-//   if (PLAYER_1.hp > PLAYER_2.hp) {
-//     return PLAYER_1.name;
-//   }
-//   if (PLAYER_1.hp < PLAYER_2.hp) {
-//     return PLAYER_2.name;
-//   }
-//   return
-// }
-
-function createWinPlayerTag(name) {
+function createWinPlayerTitle(name) {
   let $winTitle = createElement('div', 'winTitle');
-  $winTitle.innerHTML = `${name} wins!!!` ;
+if (name) {
+  $winTitle.innerHTML = `${name} wins!!!`;
+} else {
+  $winTitle.innerHTML = `draw`;
+}
+
   return $winTitle;
 }
 
 
 // ------------addEventListener------------------
 $randomButton.addEventListener('click', () => {
-  changeHP(PLAYER_1);
-  changeHP(PLAYER_2);
+  changeHP(obj_PLAYER_1);
+  changeHP(obj_PLAYER_2);
+
+  if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
+    $randomButton.disabled = true;
+  }
+
+  if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
+    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
+  } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
+    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
+  } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
+    $arenas.appendChild(createWinPlayerTitle());
+  }
 });
 
 
-$arenas.appendChild(createPlayer(PLAYER_1));
-$arenas.appendChild(createPlayer(PLAYER_2));
+$arenas.appendChild(createPlayer(obj_PLAYER_1));
+$arenas.appendChild(createPlayer(obj_PLAYER_2));
