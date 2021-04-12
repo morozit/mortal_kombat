@@ -10,7 +10,7 @@ const playerIcon = {
   sonya: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
   subzero: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
-}
+};
 
 const PLAYER_1 = {
   player: 1,
@@ -21,7 +21,7 @@ const PLAYER_1 = {
   attack: () => {
     return console.log(`${PLAYER_1.name} Fight...`);
   },
-}
+};
 
 const PLAYER_2 = {
   player: 2,
@@ -32,7 +32,7 @@ const PLAYER_2 = {
   attack: () => {
     return console.log(`${PLAYER_2.name} Fight...`);
   },
-}
+};
 
 // --------------Function-------------------------
 
@@ -78,15 +78,18 @@ function changeHP(playerHP) {
   let $playerLife = document.querySelector(`.player${playerHP.player} .life`);
 
   playerHP.hp -= random(20);
-  playerHP.hp <= 0 ?  $playerLife.style.width = '0%' : $playerLife.style.width = `${playerHP.hp}%`;
+  
+  playerHP.hp <= 0 ? playerHP.hp = 0 : playerHP.hp;
+  $playerLife.style.width = `${playerHP.hp}%`
 
-  console.log(playerHP.hp);
+  console.log(`${playerHP.name}-♥`, playerHP.hp);
+
   if (playerHP.hp <= 0) {
     $randomButton.disabled = true
 
-    // console.log(playerWins());
-    $arenas.appendChild(createWinPlayerTag(playerWins()));
-    
+    // console.log('function', playerWins(PLAYER_1, PLAYER_2));
+    $arenas.appendChild(createWinPlayerTag(playerWins(PLAYER_1, PLAYER_2)));
+    // $arenas.appendChild(createWinPlayerTag(playerWins()));
   }
   return playerHP.name
 }
@@ -94,18 +97,32 @@ function changeHP(playerHP) {
 const random = (num) => {
   console.log('RANDOM', Math.ceil(Math.random() * num));
   return Math.ceil(Math.random() * num);
-
 };
 
-function playerWins () {
-  if (PLAYER_1.hp > PLAYER_2.hp) {
-    return PLAYER_1.name;
+function playerWins (p1, p2) {
+  if (p1.hp === p2.hp) {
+    return `ничья`;
   }
-  if (PLAYER_1.hp < PLAYER_2.hp) {
-    return PLAYER_2.name;
+  
+  if (p1.hp > p2.hp) {
+    return p1.name;
   }
+  if (p1.hp < p2.hp) {
+    return p2.name;
+  }
+
   return
 }
+
+// function playerWins () {
+//   if (PLAYER_1.hp > PLAYER_2.hp) {
+//     return PLAYER_1.name;
+//   }
+//   if (PLAYER_1.hp < PLAYER_2.hp) {
+//     return PLAYER_2.name;
+//   }
+//   return
+// }
 
 function createWinPlayerTag(name) {
   let $winTitle = createElement('div', 'winTitle');
