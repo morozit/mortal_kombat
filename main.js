@@ -19,7 +19,7 @@ const HIT = {
   foot: 20,
 }
 
-const ATACK = ['head', 'body', 'foot'];
+const ATTACK = ['head', 'body', 'foot'];
 
 
 const obj_PLAYER_1 = {
@@ -164,7 +164,40 @@ function createReloadButton() {
 $arenas.appendChild(createPlayer(obj_PLAYER_1));
 $arenas.appendChild(createPlayer(obj_PLAYER_2));
 
+// !!! куда бє компютер
+function enemyAttack() {
+  let hit = ATTACK[getRandom(3) - 1];
+  let defence = ATTACK[getRandom(3) - 1];
+  // console.log('###: hit', hit);
+  // console.log('###: defence', defence);
+  return {
+    value: getRandom(HIT[hit]),
+    hit,
+    defence,  
+  }
+}
+
+
+// !!! куди бє гравець
 $formFight.addEventListener('submit', function (e) {
   e.preventDefault();
   console.log($formFight);
-})
+  let enemy = enemyAttack();
+  // console.log('### enemy', enemy);
+  let attack = {};
+
+  for (const item of $formFight) {
+    console.dir(item);
+    if (item.checked && item.name === 'hit') {
+      attack.value = getRandom(HIT[item.value]);
+      attack.hit = item.value;
+    }
+    
+    if (item.checked && item.name === 'defence') {
+      attack.defence = item.value;
+    }
+    // item.checked = false;
+  }
+  console.log('###', attack);
+  console.log('###', enemy);
+});
