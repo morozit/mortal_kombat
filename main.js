@@ -1,6 +1,7 @@
 // ----------------DOM---------------------------
 const $arenas = document.querySelector('.arenas');
-const $randomButton = document.querySelector('.button');
+// const $randomButton = document.querySelector('.button');
+const $formFight = document.querySelector('.control');
 
 // ----------------Object------------------------
 const playerIcon = {
@@ -11,6 +12,15 @@ const playerIcon = {
   subzero: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 };
+
+const HIT = {
+  head: 30,
+  body: 25,
+  foot: 20,
+}
+
+const ATACK = ['head', 'body', 'foot'];
+
 
 const obj_PLAYER_1 = {
   player: 1,
@@ -130,28 +140,31 @@ function createReloadButton() {
 }
 
 // ------------addEventListener------------------
-$randomButton.addEventListener('click', () => {
-  // changeHP(obj_PLAYER_1);
-  // changeHP(obj_PLAYER_2);
-  obj_PLAYER_1.changeHP(getRandom(20));
-  obj_PLAYER_2.changeHP(getRandom(20));
-  obj_PLAYER_1.renderHP();
-  obj_PLAYER_2.renderHP();
+// $randomButton.addEventListener('click', () => {
+//   obj_PLAYER_1.changeHP(getRandom(20));
+//   obj_PLAYER_2.changeHP(getRandom(20));
+//   obj_PLAYER_1.renderHP();
+//   obj_PLAYER_2.renderHP();
 
-  if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
-    $randomButton.disabled = true;
-    createReloadButton()
-  }
+//   if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
+//     $randomButton.disabled = true;
+//     createReloadButton()
+//   }
 
-  if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
-    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
-  } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
-    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
-  } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
-    $arenas.appendChild(createWinPlayerTitle());
-  }
-});
+//   if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
+//     $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
+//   } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
+//     $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
+//   } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
+//     $arenas.appendChild(createWinPlayerTitle());
+//   }
+// });
 
 
 $arenas.appendChild(createPlayer(obj_PLAYER_1));
 $arenas.appendChild(createPlayer(obj_PLAYER_2));
+
+$formFight.addEventListener('submit', function (e) {
+  e.preventDefault();
+  console.log($formFight);
+})
