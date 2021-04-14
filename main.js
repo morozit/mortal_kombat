@@ -118,6 +118,16 @@ if (name) {
   return $winTitle;
 }
 
+function createReloadButton() {
+  let $reloadBtnDiv = createElement('div', 'reloadWrap');
+  let $reloadBtn = createElement('button', 'button');
+  $reloadBtn.innerHTML = 'Reload';
+  $reloadBtn.addEventListener('click', () => {
+    window.location.reload();
+  });
+  $reloadBtnDiv.appendChild($reloadBtn);
+  $arenas.appendChild($reloadBtnDiv);
+}
 
 // ------------addEventListener------------------
 $randomButton.addEventListener('click', () => {
@@ -130,6 +140,7 @@ $randomButton.addEventListener('click', () => {
 
   if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
     $randomButton.disabled = true;
+    createReloadButton()
   }
 
   if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
