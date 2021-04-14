@@ -1,6 +1,6 @@
 // ----------------DOM---------------------------
 const $arenas = document.querySelector('.arenas');
-// const $randomButton = document.querySelector('.button');
+const $fightButton = document.querySelector('.button');
 const $formFight = document.querySelector('.control');
 
 // ----------------Object------------------------
@@ -13,13 +13,15 @@ const playerIcon = {
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 };
 
+// Цифри для генерації випадкового удару
 const HIT = {
   head: 30,
   body: 25,
   foot: 20,
 }
 
-const ATTACK = ['head', 'body', 'foot'];
+// для генерації АТАК та ЗАХИСТУ сторони противника (пк)
+const OPPONENT = ['head', 'body', 'foot'];
 
 
 const obj_PLAYER_1 = {
@@ -139,39 +141,20 @@ function createReloadButton() {
   $arenas.appendChild($reloadBtnDiv);
 }
 
-// ------------addEventListener------------------
-// $randomButton.addEventListener('click', () => {
-//   obj_PLAYER_1.changeHP(getRandom(20));
-//   obj_PLAYER_2.changeHP(getRandom(20));
-//   obj_PLAYER_1.renderHP();
-//   obj_PLAYER_2.renderHP();
-
-//   if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
-//     $randomButton.disabled = true;
-//     createReloadButton()
-//   }
-
-//   if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
-//     $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
-//   } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
-//     $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
-//   } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
-//     $arenas.appendChild(createWinPlayerTitle());
-//   }
-// });
-
-
 $arenas.appendChild(createPlayer(obj_PLAYER_1));
 $arenas.appendChild(createPlayer(obj_PLAYER_2));
 
 // !!! куда бє компютер
 function enemyAttack() {
-  let hit = ATTACK[getRandom(3) - 1];
-  let defence = ATTACK[getRandom(3) - 1];
+  let hit = OPPONENT[getRandom(3) - 1];
+  let defence = OPPONENT[getRandom(3) - 1];
+
   // console.log('###: hit', hit);
   // console.log('###: defence', defence);
   return {
+    // value на скільки вдарив ворог
     value: getRandom(HIT[hit]),
+    // hit, defence частини тіла які атакyє і захищає ПК
     hit,
     defence,  
   }
@@ -179,25 +162,49 @@ function enemyAttack() {
 
 
 // !!! куди бє гравець
-$formFight.addEventListener('submit', function (e) {
-  e.preventDefault();
-  console.log($formFight);
-  let enemy = enemyAttack();
-  // console.log('### enemy', enemy);
-  let attack = {};
+$formFight.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  // console.dir($formFight);
+  let obj_enemyAttack = enemyAttack();
+  let obj_playerAttack = {};
 
+
+
+  
   for (const item of $formFight) {
-    console.dir(item);
+
     if (item.checked && item.name === 'hit') {
-      attack.value = getRandom(HIT[item.value]);
-      attack.hit = item.value;
+      obj_playerAttack.value = getRandom(HIT[item.value]);
+      obj_playerAttack.hit = item.value;
     }
     
     if (item.checked && item.name === 'defence') {
-      attack.defence = item.value;
+      obj_playerAttack.defence = item.value;
     }
     // item.checked = false;
   }
-  console.log('###', attack);
-  console.log('###', enemy);
+  console.log('### obj_enemyAttack', obj_enemyAttack.value);
+  console.log('### obj_playerAttack', obj_playerAttack.value);
+
+  obj_PLAYER_1.changeHP(obj_enemyAttack.value);
+  obj_PLAYER_2.changeHP(obj_playerAttack.value);
+  obj_PLAYER_1.renderHP();
+  obj_PLAYER_2.renderHP();
+
+
+
+  // !!!!!! marking the end of the battle   &   remove form
+  if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
+    $fightButton.disabled = true;
+    $formFight.remove();
+    createReloadButton();
+  }
+  // !!!!  TITLE
+  if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
+    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
+  } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
+    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
+  } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
+    $arenas.appendChild(createWinPlayerTitle());
+  }
 });
