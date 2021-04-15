@@ -145,32 +145,18 @@ function createWinPlayerTitle(name) {
 
 // !!!! ЛОГИКА нанесенния ударов ----------------
 function logicStrikes (pA1, pA2) {
-  pA1.hit !== pA2.defence 
-    ? obj_PLAYER_2.changeHP(pA1.value) 
-    : obj_PLAYER_2.changeHP(0);
 
-  pA2.hit !== pA1.defence 
-    ? obj_PLAYER_1.changeHP(pA2.value)
-    : obj_PLAYER_1.changeHP(0);
+  if (pA1.hit !== pA2.defence) {
+    obj_PLAYER_2.changeHP(pA1.value);
+  }
 
-  // ? норм тернарным, УДАЛЯТЬ?
-  // if (pA1.hit !== pA2.defence) {
-  //   obj_PLAYER_2.changeHP(pA1.value);
-  // } else if (pA1.hit === pA2.defence) {
-  //   obj_PLAYER_2.changeHP(0);
-  // };
-
-  // if (pA2.hit !== pA1.defence) {
-  //   obj_PLAYER_1.changeHP(pA2.value);
-  // } else if (pA2.hit === pA1.defence) {
-  //   obj_PLAYER_1.changeHP(0);
-  // };
+  if (pA2.hit !== pA1.defence) {
+    obj_PLAYER_1.changeHP(pA2.value);
+  }
   
-
   obj_PLAYER_1.renderHP();
   obj_PLAYER_2.renderHP();
 }
-
 
 // !!! куда бьет пк
 function enemyAttack() {
@@ -202,7 +188,7 @@ function playerAttack() {
   return {
     value,
     hit,
-    defence,  
+    defence, 
   }
 }
 
