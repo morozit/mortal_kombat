@@ -80,7 +80,7 @@ function createPlayer(data) {
   $name.innerHTML = data.name;
   $img.src = data.img;
 
-  // !!! appendChild
+  // !!!add pers
   $progressbar.appendChild($life);
   $progressbar.appendChild($name);
   
@@ -92,16 +92,16 @@ function createPlayer(data) {
   return $player;
 }
 
-function changeHP(lostLife) {
-  console.log(`%c${this.name} -${lostLife}hp`, 'color: #ffffff; background-color: #CD0E03; padding: 4px 50px; font-size: 12px;');
 
+// !!!!  HP ---------------------------
+function changeHP(lostLife) {
   this.hp -= lostLife;
   if (this.hp <= 0) {
     this.hp = 0;
   }
+  // console.log(`%c${this.name} -${lostLife}hp`, 'color: #ffffff; background-color: #CD0E03; padding: 4px 50px; font-size: 12px;');
 
-
-  console.log(`%c${this.name} ${this.hp}-♥`, 'color: #ffffff; background-color: #4CAF50; padding: 4px 50px; font-size: 12px;');
+  // console.log(`%c${this.name} ${this.hp}-♥`, 'color: #ffffff; background-color: #4CAF50; padding: 4px 50px; font-size: 12px;');
 }
 
 function elHP() {
@@ -118,18 +118,98 @@ function renderHP() {
 function getRandom (num) {
   return Math.ceil(Math.random() * num);
 }
+// !!! -------------------------------------
+
+// !!!! TITLE -------------------------------
+function outputWinPlayerTitle (p1, p2) {
+  if (p1.hp === 0 && p1.hp < p2.hp) {
+    $arenas.appendChild(createWinPlayerTitle(p2.name));
+  } else if (p2.hp === 0 && p1.hp > p2.hp)  {
+    $arenas.appendChild(createWinPlayerTitle(p1.name));
+  } else if  (p1.hp === 0 && p2.hp === 0) {
+    $arenas.appendChild(createWinPlayerTitle());
+  }
+}
 
 function createWinPlayerTitle(name) {
   let $winTitle = createElement('div', 'winTitle');
-if (name) {
-  $winTitle.innerHTML = `${name} wins!!!`;
-} else {
-  $winTitle.innerHTML = `draw`;
-}
-
+  if (name) {
+    $winTitle.innerHTML = `${name} wins!!!`;
+  } else {
+    $winTitle.innerHTML = `draw`;
+  }
   return $winTitle;
 }
+// !!!!  ----------------------------------------------
 
+
+// !!!! ЛОГИКА нанесенния ударов ----------------
+function logicStrikes (pA1, pA2) {
+  pA1.hit !== pA2.defence 
+    ? obj_PLAYER_2.changeHP(pA1.value) 
+    : obj_PLAYER_2.changeHP(0);
+
+  pA2.hit !== pA1.defence 
+    ? obj_PLAYER_1.changeHP(pA2.value)
+    : obj_PLAYER_1.changeHP(0);
+
+  // ? норм тернарным, УДАЛЯТЬ?
+  // if (pA1.hit !== pA2.defence) {
+  //   obj_PLAYER_2.changeHP(pA1.value);
+  // } else if (pA1.hit === pA2.defence) {
+  //   obj_PLAYER_2.changeHP(0);
+  // };
+
+  // if (pA2.hit !== pA1.defence) {
+  //   obj_PLAYER_1.changeHP(pA2.value);
+  // } else if (pA2.hit === pA1.defence) {
+  //   obj_PLAYER_1.changeHP(0);
+  // };
+  
+
+  obj_PLAYER_1.renderHP();
+  obj_PLAYER_2.renderHP();
+}
+
+
+// !!! куда бьет пк
+function enemyAttack() {
+  let hit = OPPONENT[getRandom(3) - 1];
+  let defence = OPPONENT[getRandom(3) - 1];
+
+  return {
+    value: getRandom(HIT[hit]),
+    hit,
+    defence,  
+  }
+}
+// !!!! ----------------------------------------
+function playerAttack() {
+  for (const item of $formFight) {
+
+    if (item.checked && item.name === 'hit') {
+      value = getRandom(HIT[item.value]);
+      hit = item.value;
+    }
+    
+    if (item.checked && item.name === 'defence') {
+      defence = item.value;
+    }
+    // !!!!!!!!! ВКЛЮЧИТИ!!!!!!
+    // item.checked = false;
+  }
+
+  return {
+    value,
+    hit,
+    defence,  
+  }
+}
+
+// !!!!----------------------------------------
+
+
+// !!!! рестарт боя-----------------------------
 function createReloadButton() {
   let $reloadBtnDiv = createElement('div', 'reloadWrap');
   let $reloadBtn = createElement('button', 'button');
@@ -140,71 +220,30 @@ function createReloadButton() {
   $reloadBtnDiv.appendChild($reloadBtn);
   $arenas.appendChild($reloadBtnDiv);
 }
+// !!!-------------------------------------------
+
 
 $arenas.appendChild(createPlayer(obj_PLAYER_1));
 $arenas.appendChild(createPlayer(obj_PLAYER_2));
 
-// !!! куда бє компютер
-function enemyAttack() {
-  let hit = OPPONENT[getRandom(3) - 1];
-  let defence = OPPONENT[getRandom(3) - 1];
 
-  // console.log('###: hit', hit);
-  // console.log('###: defence', defence);
-  return {
-    // value на скільки вдарив ворог
-    value: getRandom(HIT[hit]),
-    // hit, defence частини тіла які атакyє і захищає ПК
-    hit,
-    defence,  
-  }
-}
-
-
-// !!! куди бє гравець
 $formFight.addEventListener('submit', function (evt) {
   evt.preventDefault();
-  // console.dir($formFight);
+
   let obj_enemyAttack = enemyAttack();
-  let obj_playerAttack = {};
+  let obj_playerAttack = playerAttack();
+
+  logicStrikes(obj_playerAttack, obj_enemyAttack)
+  outputWinPlayerTitle(obj_PLAYER_1, obj_PLAYER_2);
+
+  console.log(`${obj_PLAYER_1.name} ${obj_PLAYER_1.hp}-♥`, obj_enemyAttack);
+  console.log(`${obj_PLAYER_2.name} ${obj_PLAYER_2.hp}-♥`, obj_playerAttack);
 
 
-
-  
-  for (const item of $formFight) {
-
-    if (item.checked && item.name === 'hit') {
-      obj_playerAttack.value = getRandom(HIT[item.value]);
-      obj_playerAttack.hit = item.value;
-    }
-    
-    if (item.checked && item.name === 'defence') {
-      obj_playerAttack.defence = item.value;
-    }
-    // item.checked = false;
-  }
-  console.log('### obj_enemyAttack', obj_enemyAttack.value);
-  console.log('### obj_playerAttack', obj_playerAttack.value);
-
-  obj_PLAYER_1.changeHP(obj_enemyAttack.value);
-  obj_PLAYER_2.changeHP(obj_playerAttack.value);
-  obj_PLAYER_1.renderHP();
-  obj_PLAYER_2.renderHP();
-
-
-
-  // !!!!!! marking the end of the battle   &   remove form
+    // !!!!!! marking the end of the battle   &   remove form
   if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
     $fightButton.disabled = true;
     $formFight.remove();
     createReloadButton();
-  }
-  // !!!!  TITLE
-  if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
-    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
-  } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
-    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
-  } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
-    $arenas.appendChild(createWinPlayerTitle());
   }
 });
