@@ -142,7 +142,17 @@ function createWinPlayerTitle(name) {
 }
 // !!!!  ----------------------------------------------
 
+// function logicStrikes(player, hit, def, value) {
 
+//   if (hit !== def) {
+//     player.changeHP(value);
+//   }
+
+//   player.renderHP();
+// }
+
+// logicStrikes(obj_PLAYER_2, obj_playerAttack.hit, obj_enemyAttack.defenceб  obj_playerAttack.value);
+// logicStrikes(obj_PLAYER_1, obj_enemyAttack.hit, obj_playerAttack.defence, obj_playerAttack.defence.value);
 // !!!! ЛОГИКА нанесенния ударов ----------------
 function logicStrikes (pA1, pA2) {
 
