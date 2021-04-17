@@ -1,6 +1,7 @@
 // ----------------DOM---------------------------
 const $arenas = document.querySelector('.arenas');
-const $randomButton = document.querySelector('.button');
+const $fightButton = document.querySelector('.button');
+const $formFight = document.querySelector('.control');
 
 // ----------------Object------------------------
 const playerIcon = {
@@ -11,6 +12,17 @@ const playerIcon = {
   subzero: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 };
+
+// Цифри для генерації випадкового удару
+const HIT = {
+  head: 30,
+  body: 25,
+  foot: 20,
+}
+
+// для генерації АТАК та ЗАХИСТУ сторони противника (пк)
+const OPPONENT = ['head', 'body', 'foot'];
+
 
 const obj_PLAYER_1 = {
   player: 1,
@@ -68,7 +80,7 @@ function createPlayer(data) {
   $name.innerHTML = data.name;
   $img.src = data.img;
 
-  // !!! appendChild
+  // !!!add pers
   $progressbar.appendChild($life);
   $progressbar.appendChild($name);
   
@@ -80,16 +92,16 @@ function createPlayer(data) {
   return $player;
 }
 
-function changeHP(lostLife) {
-  console.log(`%c${this.name} -${lostLife}hp`, 'color: #ffffff; background-color: #CD0E03; padding: 4px 50px; font-size: 12px;');
 
+// !!!!  HP ---------------------------
+function changeHP(lostLife) {
   this.hp -= lostLife;
   if (this.hp <= 0) {
     this.hp = 0;
   }
+  // console.log(`%c${this.name} -${lostLife}hp`, 'color: #ffffff; background-color: #CD0E03; padding: 4px 50px; font-size: 12px;');
 
-
-  console.log(`%c${this.name} ${this.hp}-♥`, 'color: #ffffff; background-color: #4CAF50; padding: 4px 50px; font-size: 12px;');
+  // console.log(`%c${this.name} ${this.hp}-♥`, 'color: #ffffff; background-color: #4CAF50; padding: 4px 50px; font-size: 12px;');
 }
 
 function elHP() {
@@ -106,41 +118,128 @@ function renderHP() {
 function getRandom (num) {
   return Math.ceil(Math.random() * num);
 }
+// !!! -------------------------------------
+
+// !!!! TITLE -------------------------------
+function outputWinPlayerTitle (p1, p2) {
+  if (p1.hp === 0 && p1.hp < p2.hp) {
+    $arenas.appendChild(createWinPlayerTitle(p2.name));
+  } else if (p2.hp === 0 && p1.hp > p2.hp)  {
+    $arenas.appendChild(createWinPlayerTitle(p1.name));
+  } else if  (p1.hp === 0 && p2.hp === 0) {
+    $arenas.appendChild(createWinPlayerTitle());
+  }
+}
 
 function createWinPlayerTitle(name) {
   let $winTitle = createElement('div', 'winTitle');
-if (name) {
-  $winTitle.innerHTML = `${name} wins!!!`;
-} else {
-  $winTitle.innerHTML = `draw`;
-}
-
+  if (name) {
+    $winTitle.innerHTML = `${name} wins!!!`;
+  } else {
+    $winTitle.innerHTML = `draw`;
+  }
   return $winTitle;
 }
+// !!!!  ----------------------------------------------
 
+// function logicStrikes(player, hit, def, value) {
 
-// ------------addEventListener------------------
-$randomButton.addEventListener('click', () => {
-  // changeHP(obj_PLAYER_1);
-  // changeHP(obj_PLAYER_2);
-  obj_PLAYER_1.changeHP(getRandom(20));
-  obj_PLAYER_2.changeHP(getRandom(20));
+//   if (hit !== def) {
+//     player.changeHP(value);
+//   }
+
+//   player.renderHP();
+// }
+
+// logicStrikes(obj_PLAYER_2, obj_playerAttack.hit, obj_enemyAttack.defenceб  obj_playerAttack.value);
+// logicStrikes(obj_PLAYER_1, obj_enemyAttack.hit, obj_playerAttack.defence, obj_playerAttack.defence.value);
+// !!!! ЛОГИКА нанесенния ударов ----------------
+function logicStrikes (pA1, pA2) {
+
+  if (pA1.hit !== pA2.defence) {
+    obj_PLAYER_2.changeHP(pA1.value);
+  }
+
+  if (pA2.hit !== pA1.defence) {
+    obj_PLAYER_1.changeHP(pA2.value);
+  }
+  
   obj_PLAYER_1.renderHP();
   obj_PLAYER_2.renderHP();
+}
 
-  if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
-    $randomButton.disabled = true;
+// !!! куда бьет пк
+function enemyAttack() {
+  let hit = OPPONENT[getRandom(3) - 1];
+  let defence = OPPONENT[getRandom(3) - 1];
+
+  return {
+    value: getRandom(HIT[hit]),
+    hit,
+    defence,  
+  }
+}
+// !!!! ----------------------------------------
+function playerAttack() {
+  for (const item of $formFight) {
+
+    if (item.checked && item.name === 'hit') {
+      value = getRandom(HIT[item.value]);
+      hit = item.value;
+    }
+    
+    if (item.checked && item.name === 'defence') {
+      defence = item.value;
+    }
+    // !!!!!!!!! ВКЛЮЧИТИ!!!!!!
+    // item.checked = false;
   }
 
-  if (obj_PLAYER_1.hp === 0 && obj_PLAYER_1.hp < obj_PLAYER_2.hp) {
-    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_2.name));
-  } else if (obj_PLAYER_2.hp === 0 && obj_PLAYER_1.hp > obj_PLAYER_2.hp)  {
-    $arenas.appendChild(createWinPlayerTitle(obj_PLAYER_1.name));
-  } else if  (obj_PLAYER_1.hp === 0 && obj_PLAYER_2.hp === 0) {
-    $arenas.appendChild(createWinPlayerTitle());
+  return {
+    value,
+    hit,
+    defence, 
   }
-});
+}
+
+// !!!!----------------------------------------
+
+
+// !!!! рестарт боя-----------------------------
+function createReloadButton() {
+  let $reloadBtnDiv = createElement('div', 'reloadWrap');
+  let $reloadBtn = createElement('button', 'button');
+  $reloadBtn.innerHTML = 'Reload';
+  $reloadBtn.addEventListener('click', () => {
+    window.location.reload();
+  });
+  $reloadBtnDiv.appendChild($reloadBtn);
+  $arenas.appendChild($reloadBtnDiv);
+}
+// !!!-------------------------------------------
 
 
 $arenas.appendChild(createPlayer(obj_PLAYER_1));
 $arenas.appendChild(createPlayer(obj_PLAYER_2));
+
+
+$formFight.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+
+  let obj_enemyAttack = enemyAttack();
+  let obj_playerAttack = playerAttack();
+
+  logicStrikes(obj_playerAttack, obj_enemyAttack)
+  outputWinPlayerTitle(obj_PLAYER_1, obj_PLAYER_2);
+
+  console.log(`${obj_PLAYER_1.name} ${obj_PLAYER_1.hp}-♥`, obj_enemyAttack);
+  console.log(`${obj_PLAYER_2.name} ${obj_PLAYER_2.hp}-♥`, obj_playerAttack);
+
+
+    // !!!!!! marking the end of the battle   &   remove form
+  if (obj_PLAYER_1.hp === 0 || obj_PLAYER_2.hp === 0) {
+    $fightButton.disabled = true;
+    $formFight.remove();
+    createReloadButton();
+  }
+});
