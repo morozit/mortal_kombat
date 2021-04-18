@@ -1,8 +1,14 @@
+
+
 // ----------------DOM---------------------------
 const $arenas = document.querySelector('.arenas');
 const $fightButton = document.querySelector('.button');
 const $formFight = document.querySelector('.control');
 const $chat = document.querySelector('.chat');
+
+// import { playerIcon } from "./playerIcon.js";
+// import { logs } from "./logs.js";
+
 
 // ----------------Object------------------------
 const playerIcon = {
@@ -74,7 +80,6 @@ const obj_PLAYER_1 = {
   changeHP,
   renderHP,
   elHP,
-  value: this.hp - this.changeHP,
   attack: () => {
     return console.log(`${obj_PLAYER_1.name} Fight...`);
   },
@@ -89,7 +94,6 @@ const obj_PLAYER_2 = {
   changeHP,
   renderHP,
   elHP,
-  value: this.hp - this.changeHP,
   attack: () => {
     return console.log(`${obj_PLAYER_2.name} Fight...`);
   },
@@ -143,8 +147,8 @@ function changeHP(lostLife) {
     this.hp = 0;
   }
     this === obj_PLAYER_2 
-      ? generateLog('hit', obj_PLAYER_2, obj_PLAYER_1, lostLife, obj_PLAYER_1.hp) 
-      : generateLog('hit', obj_PLAYER_1, obj_PLAYER_2, lostLife, obj_PLAYER_2.hp)
+      ? generateLog('hit', obj_PLAYER_2, obj_PLAYER_1, lostLife, obj_PLAYER_2.hp) 
+      : generateLog('hit', obj_PLAYER_1, obj_PLAYER_2, lostLife, obj_PLAYER_1.hp)
   
   return this.hp;
 }
@@ -171,7 +175,7 @@ function outputWinPlayerTitle (p1, p2) {
 
     if (p1.hp === 0 && p1.hp < p2.hp) {
       $arenas.appendChild(createWinPlayerTitle(p2.name));
-      generateLog('hit', obj_PLAYER_2, obj_PLAYER_1);
+      generateLog('end', obj_PLAYER_2, obj_PLAYER_1);
     } else if (p2.hp === 0 && p1.hp > p2.hp)  {
       $arenas.appendChild(createWinPlayerTitle(p1.name));
       generateLog('end', obj_PLAYER_1, obj_PLAYER_2);
@@ -197,9 +201,6 @@ function createWinPlayerTitle(name) {
 }
 
 // !!!! -----------CHAT--------------------------
-   function getCurrentTimeString() {
-      return new Date().toTimeString().replace(/ .*/, '');
-   }
 function generateLog (type, plKick, plDefence, playerValue, playerHP) {
   let textLog = '';
   let timeNow = new Date().toTimeString().replace(/ .*/, '');
@@ -208,7 +209,7 @@ function generateLog (type, plKick, plDefence, playerValue, playerHP) {
     case 'start':
       textLog = logs.start.replace('[time]', timeNow).replace('[player1]', plKick.name).replace('[player2]', plDefence.name);
       break;
-
+    // ? switch hit = [head, body, food]   
     case 'hit': 
       textLog = `${timeNow} ${logs[type][getRandom(logs[type].length) - 1].replace('[playerKick]', plKick.name).replace('[playerDefence]', plDefence.name)}, -${playerValue} жизни  [${playerHP} / 100]`;
       break;
@@ -219,11 +220,13 @@ function generateLog (type, plKick, plDefence, playerValue, playerHP) {
     
     case 'end':
       textLog = `${timeNow} ${logs[type][getRandom(logs[type].length) - 1].replace('[playerWins]', plKick.name).replace('[playerLose]', plDefence.name)}`;
+      break;
 
     case 'draw':
       textLog = `${timeNow} ${logs[type]}`
+      break;
 
-
+    default: 
   }
 
 
@@ -231,41 +234,27 @@ function generateLog (type, plKick, plDefence, playerValue, playerHP) {
   let el = `<p>${textLog}</p>`;
   $chat.insertAdjacentHTML('afterbegin', el);
 }
-generateLog('start', obj_PLAYER_1, obj_PLAYER_2);
+
 
 // !!!! ЛОГИКА нанесенния ударов ----------------
 function logicStrikes (pA1, pA2) {
   
-
-
   if (pA1.hit !== pA2.defence) {
     obj_PLAYER_2.changeHP(pA1.value);
     obj_PLAYER_2.renderHP();
     // generateLog('hit', obj_PLAYER_1, obj_PLAYER_2, );
   } else {
-  
     generateLog('defence', obj_PLAYER_1, obj_PLAYER_2, 0, obj_PLAYER_2.hp);
   }
-
-
-
-
 
   if (pA2.hit !== pA1.defence) {
     obj_PLAYER_1.changeHP(pA2.value);
     obj_PLAYER_1.renderHP();
     // generateLog('hit', obj_PLAYER_2, obj_PLAYER_1);
   } else {
-
     generateLog('defence', obj_PLAYER_2, obj_PLAYER_1, 0, obj_PLAYER_1.hp);
-  }
-  
-  
-  
+  } 
 }
-
-
-
 
 // !!! куда бьет пк
 function enemyAttack() {
@@ -300,8 +289,25 @@ function playerAttack() {
     defence, 
   }
 }
-  // let obj_enemyAttack = enemyAttack();
-  // let obj_playerAttack = playerAttack();
+
+// !!!! Старт боя ---------------------------
+function createStartButton() {
+  $formFight.style.display = "none";
+  let $startBtnDiv = createElement('div', 'startWrap');
+  let $startBtn = createElement('button', 'button');
+  $startBtn.innerHTML = 'Start';
+
+  $startBtnDiv.appendChild($startBtn);
+  $arenas.appendChild($startBtnDiv);
+  $startBtn.addEventListener('click', () => {
+    $startBtnDiv.style.display = "none";
+    $formFight.style.display = '';
+    generateLog('start', obj_PLAYER_1, obj_PLAYER_2);
+  });
+}
+
+createStartButton();
+
 
 // !!!! рестарт боя-----------------------------
 function createReloadButton() {
@@ -314,16 +320,15 @@ function createReloadButton() {
   $reloadBtnDiv.appendChild($reloadBtn);
   $arenas.appendChild($reloadBtnDiv);
 }
+
 // !!!-------------------------------------------
 
 
 $arenas.appendChild(createPlayer(obj_PLAYER_1));
 $arenas.appendChild(createPlayer(obj_PLAYER_2));
 
-
 $formFight.addEventListener('submit', function (evt) {
   evt.preventDefault();
-
   let obj_enemyAttack = enemyAttack();
   let obj_playerAttack = playerAttack();
 
@@ -336,7 +341,4 @@ $formFight.addEventListener('submit', function (evt) {
 
   console.log(`${obj_PLAYER_1.name} ${obj_PLAYER_1.hp}-♥`, obj_playerAttack);
   console.log(`${obj_PLAYER_2.name} ${obj_PLAYER_2.hp}-♥`, obj_enemyAttack);
-  // console.log(`%c${this.name} -${lostLife}hp`, 'color: #ffffff; background-color: #CD0E03; padding: 4px 50px; font-size: 12px;');
-
-  // console.log(`%c${this.name} ${this.hp}-♥`, 'color: #ffffff; background-color: #4CAF50; padding: 4px 50px; font-size: 12px;');
 });
