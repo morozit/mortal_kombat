@@ -207,23 +207,34 @@ function generateLog (type, plKick, plDefence, playerValue, playerHP) {
   switch (type) {
 
     case 'start':
-      textLog = logs.start.replace('[time]', timeNow).replace('[player1]', plKick.name).replace('[player2]', plDefence.name);
+      textLog = logs.start
+        // .replace('[time]', timeNow)
+        .replace('[time]', `<span style='font-weight: bold;'>[${timeNow}]</span>`)
+        .replace('[player1]', plKick.name)
+        .replace('[player2]', plDefence.name);
       break;
     // ? switch hit = [head, body, food]   
     case 'hit': 
-      textLog = `${timeNow} ${logs[type][getRandom(logs[type].length) - 1].replace('[playerKick]', plKick.name).replace('[playerDefence]', plDefence.name)}, -${playerValue} жизни  [${playerHP} / 100]`;
+      textLog = 
+        `<span style='font-weight: bold;'>[${timeNow}]</span> ${logs[type][getRandom(logs[type].length) - 1]
+        .replace('[playerKick]', plKick.name)
+        .replace('[playerDefence]', plDefence.name)}, <span style='color: #cd0e03; font-weight: bold;'>-${playerValue}</span> жизни  [${playerHP} / 100]`;
       break;
 
     case 'defence': 
-      textLog = `${timeNow} ${logs[type][getRandom(logs[type].length) - 1].replace('[playerKick]', plKick.name).replace('[playerDefence]', plDefence.name)} -${playerValue} жизни  [${playerHP} / 100]`;
+      textLog = 
+        `<span style='font-weight: bold;'>[${timeNow}]</span> ${logs[type][getRandom(logs[type].length) - 1]
+        .replace('[playerKick]', plKick.name)
+        .replace('[playerDefence]', plDefence.name)} <span style='color: #00d600; font-weight: bold;'>-${playerValue}</span> жизни  [${playerHP} / 100]`;
       break;
     
     case 'end':
-      textLog = `${timeNow} ${logs[type][getRandom(logs[type].length) - 1].replace('[playerWins]', plKick.name).replace('[playerLose]', plDefence.name)}`;
+      textLog = `<span style='font-weight: bold;'>[${timeNow}]</span> ${logs[type][getRandom(logs[type].length) - 1].replace('[playerWins]', plKick.name)
+      .replace('[playerLose]', plDefence.name)}`;
       break;
 
     case 'draw':
-      textLog = `${timeNow} ${logs[type]}`
+      textLog = `<span style='font-weight: bold;'>[${timeNow}]</span> ${logs[type]}`
       break;
 
     default: 
