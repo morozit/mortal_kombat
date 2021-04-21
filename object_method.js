@@ -19,6 +19,3 @@ export function renderHP() {
   return this.name
 }
 
-// function getRandom (num) {
-//   return Math.ceil(Math.random() * num);
-// }
