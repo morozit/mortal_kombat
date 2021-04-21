@@ -1,6 +1,4 @@
 import { playerIcon } from "./playerIcon.js";
-// import { changeHP, renderHP, elHP } from "./object_method.js";
-// import { changeHP, renderHP, elHP } from "./main.js";
 
 export const obj_PLAYER = {
   player: 0,
