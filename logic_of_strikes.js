@@ -1,14 +1,17 @@
-import { getRandom, $formFight } from "./main.js";
 
-import 
-{ obj_PLAYER, 
-  obj_PLAYER_1, 
-  obj_PLAYER_2, 
-  obj_PLAYER_3, 
-  changeHP, 
-  elHP, 
-  renderHP} 
-  from "./obj_player.js";
+import { Game, $chat, getRandom, $formFight } from "./Game.js";
+// import { /*getRandom,*/ $formFight } from "./main.js";
+
+import { obj_PLAYER_1, obj_PLAYER_2 } from "./Player.js";
+// import 
+// { obj_PLAYER, 
+//   obj_PLAYER_1, 
+//   obj_PLAYER_2, 
+//   obj_PLAYER_3, 
+//   changeHP, 
+//   elHP, 
+//   renderHP} 
+//   from "./obj_player.js";
 
   import { generateLog } from "./logs.js";
 // !!!! ЛОГИКА нанесенния ударов ----------------

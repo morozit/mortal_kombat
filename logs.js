@@ -1,5 +1,7 @@
-import { $chat, getRandom } from "./main.js";
 
+
+import { Game, $chat, getRandom } from "./Game.js";
+// import { $chat, /*getRandom*/ } from "./main.js";
 export const logs = {
     start: 'Часы показывали [time], когда [player1] и [player2] бросили вызов друг другу.',
     end: [
