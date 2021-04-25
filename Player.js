@@ -39,7 +39,7 @@ class Player {
     let $img = createElement('img');
     
     // !!! style
-    $life.style.width = this.hp;
+    $life.style.width = `${this.hp}%`;
       
     // !!!! inerHTML
     $name.innerHTML = this.name;
