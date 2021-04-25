@@ -6,11 +6,13 @@ import { getRandom } from "./utils.js";
 
 
 export class Game {
+  constructor (props) {
+    this.player_1 = props.player_1;
+    this.player_2 = props.player_2;
+  }
   start = () => {
     $formFight.style.display = "none";
     this.createStartButton();  
-    obj_PLAYER_1.createPlayer();
-    obj_PLAYER_2.createPlayer();
   }
 
   // !!!!  Кнопка Старт -------------------------
@@ -51,7 +53,7 @@ export class Game {
         this.generateLog('end', obj_PLAYER_1, obj_PLAYER_2);
       } else if  (p1.hp === 0 && p2.hp === 0) {
         $arenas.appendChild(this.createWinPlayerTitle());
-        this.generateLog('draw');
+        this.generateLog('draw', obj_PLAYER_1, obj_PLAYER_2);
       }
       $fightButton.disabled = true;
       $formFight.remove();
