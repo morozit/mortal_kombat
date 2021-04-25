@@ -1,7 +1,9 @@
+import { refs } from "./Refs.js"
 
 
-import { Game, $chat, getRandom } from "./Game.js";
-// import { $chat, /*getRandom*/ } from "./main.js";
+
+import { game } from "./main.js";
+
 export const logs = {
     start: 'Часы показывали [time], когда [player1] и [player2] бросили вызов друг другу.',
     end: [
@@ -65,7 +67,7 @@ export function generateLog (type, plKick, plDefence) {
     // ? switch hit = [head, body, food]   
     case 'hit': 
       textLog = 
-        `${battleTime} ${logs[type][getRandom(logs[type].length) - 1]
+        `${battleTime} ${logs[type][game.getRandom(logs[type].length) - 1]
         .replace('[playerKick]', `${plKickName}`)
         .replace('[playerDefence]', `${plDefenceName}`)
         } ${kick} жизни  ${plDefenceHp}`;
@@ -73,14 +75,14 @@ export function generateLog (type, plKick, plDefence) {
 
     case 'defence': 
       textLog = 
-        `${battleTime} ${logs[type][getRandom(logs[type].length) - 1]
+        `${battleTime} ${logs[type][game.getRandom(logs[type].length) - 1]
         .replace('[playerKick]', `${plKickName}`)
         .replace('[playerDefence]', `${plDefenceName}`)} ${def} жизни  ${plDefenceHp}`;  
       break;
     
     case 'end':
       textLog = 
-        `${battleTime} ${logs[type][getRandom(logs[type].length) - 1]
+        `${battleTime} ${logs[type][game.getRandom(logs[type].length) - 1]
           .replace('[playerWins]', `${plKickName}`)
           .replace('[playerLose]', `${plDefenceName}`)}`;
       break;
@@ -92,5 +94,5 @@ export function generateLog (type, plKick, plDefence) {
     default: 
   }
   let el = `<p>${textLog}</p>`;
-  $chat.insertAdjacentHTML('afterbegin', el);
+  refs.$chat.insertAdjacentHTML('afterbegin', el);
 }

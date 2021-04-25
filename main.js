@@ -1,8 +1,8 @@
 import { Game } from "./Game.js";
-const game = new Game();
+export const game = new Game();
 // game.start();
 game.createStartButton();
-
+console.log(game)
 import { obj_PLAYER_1, obj_PLAYER_2 } from "./Player.js";
 
 import { logicStrikes, enemyAttack, playerAttack} from "./logic_of_strikes.js";
@@ -16,8 +16,8 @@ import { generateLog } from "./logs.js";
 
 
 
-$arenas.appendChild(createPlayer(obj_PLAYER_1));
-$arenas.appendChild(createPlayer(obj_PLAYER_2));
+// $arenas.appendChild(createPlayer(obj_PLAYER_1));
+// $arenas.appendChild(createPlayer(obj_PLAYER_2));
 
 
 // --------------Function-------------------------
@@ -80,33 +80,33 @@ $arenas.appendChild(createPlayer(obj_PLAYER_2));
 //   return $tag;
 // }
 
-function createPlayer(data) {
-  // ! createElement
-  let $player = createElement('div', `player${data.player}`);
-  let $progressbar = createElement('div', 'progressbar');
-  let $life = createElement('div', 'life');
-  let $name = createElement('div', 'name');
-  let $character = createElement('div', 'character');
-  let $img = createElement('img');
+// function createPlayer(data) {
+//   // ! createElement
+//   let $player = createElement('div', `player${data.player}`);
+//   let $progressbar = createElement('div', 'progressbar');
+//   let $life = createElement('div', 'life');
+//   let $name = createElement('div', 'name');
+//   let $character = createElement('div', 'character');
+//   let $img = createElement('img');
   
-  // !!! style
-  $life.style.width = `${data.hp}%`;
+//   // !!! style
+//   $life.style.width = `${data.hp}%`;
     
-  // !!!! inerHTML
-  $name.innerHTML = data.name;
-  $img.src = data.img;
+//   // !!!! inerHTML
+//   $name.innerHTML = data.name;
+//   $img.src = data.img;
 
-  // !!!add pers
-  $progressbar.appendChild($life);
-  $progressbar.appendChild($name);
+//   // !!!add pers
+//   $progressbar.appendChild($life);
+//   $progressbar.appendChild($name);
   
-  $character.appendChild($img);
+//   $character.appendChild($img);
 
-  $player.appendChild($character);
-  $player.appendChild($progressbar);
+//   $player.appendChild($character);
+//   $player.appendChild($progressbar);
 
-  return $player;
-}
+//   return $player;
+// }
 
 // // !!!! TITLE ------------------------------
 // const outputWinPlayerTitle = (p1, p2) => {

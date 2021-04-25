@@ -1,5 +1,5 @@
-
-import { Game, $chat, getRandom, $formFight } from "./Game.js";
+import { refs } from "./Refs.js"
+import { game } from "./main.js";
 // import { /*getRandom,*/ $formFight } from "./main.js";
 
 import { obj_PLAYER_1, obj_PLAYER_2 } from "./Player.js";
@@ -38,11 +38,11 @@ export function logicStrikes (pA1, pA2) {
 
 // !!! куда бьет пк
 export function enemyAttack() {
-  let hit = OPPONENT[getRandom(3) - 1];
-  let defence = OPPONENT[getRandom(3) - 1];
+  let hit = OPPONENT[game.getRandom(3) - 1];
+  let defence = OPPONENT[game.getRandom(3) - 1];
 
   return {
-    value: getRandom(randPowerHit[hit]),
+    value: game.getRandom(randPowerHit[hit]),
     hit,
     defence,  
   }
@@ -52,11 +52,11 @@ export function enemyAttack() {
 export function playerAttack() {
 
   const attack = {};
-  for (const item of $formFight) {
+  for (const item of refs.$formFight) {
     
 
     if (item.checked && item.name === 'hit') {
-      attack.value = getRandom(randPowerHit[item.value]);
+      attack.value = game.getRandom(randPowerHit[item.value]);
       attack.hit = item.value;
     }
     
