@@ -18,9 +18,7 @@ export class Game {
   }
 
 // !!!! Старт боя ---------------------------
-  // start = () => {
-  //   return createStartButton();
-  // }
+
 
  // !!! Кнопка Старта ---------------------
   createStartButton = () => {
