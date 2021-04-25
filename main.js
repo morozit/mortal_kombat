@@ -30,7 +30,10 @@ export const $formFight = document.querySelector('.control');
 export const $chat = document.querySelector('.chat');
 
 
-const game = new Game();
+const game = new Game({
+  player_1: obj_PLAYER_1.createPlayer(),
+  player_2: obj_PLAYER_2.createPlayer(),
+});
 game.start();
 
 
