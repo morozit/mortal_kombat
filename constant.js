@@ -1,6 +1,14 @@
-import { $chat, getRandom } from "./main.js";
+// Цифры для генерации случайного удара
+export const randPowerHit = {
+  head: 30,
+  body: 25,
+  foot: 20,
+}
 
-export const logs = {
+// для генерации АТАК и ЗАЩИТЫ стороны противника (пк)
+export const OPPONENT = ['head', 'body', 'foot'];
+
+export const LOGS = {
     start: 'Часы показывали [time], когда [player1] и [player2] бросили вызов друг другу.',
     end: [
         'Результат удара [playerWins]: [playerLose] - труп',
@@ -40,55 +48,11 @@ export const logs = {
     draw: 'Ничья - это тоже победа!'
 };
 
-// !!!! -----------CHAT LOG--------------------------
-export function generateLog (type, plKick, plDefence) {
-  let textLog = '';
-  let timeNow = new Date().toTimeString().replace(/ .*/, '');
-  let battleTime = `<span style='font-weight: bold;'>[${timeNow}]</span>`;
-  let kick = `<span style='color: #cd0e03; font-weight: bold;'>-${plKick.kick}</span>`;
-  let def = `<span style='color: #00d600; font-weight: bold;'>-0</span>`;
-  let plKickName = `<span style='color: ${plKick.color}; font-weight: bold;'>${plKick.name}</span>`;
-  let plKickHp = `<span style='color: ${plKick.color}; font-weight: bold;'>[${plKick.hp} / 100]</span>`
-  let plDefenceName = `<span style='color: ${plDefence.color}; font-weight: bold;'>${plDefence.name}</span>`;
-  let plDefenceHp = `<span style='color: ${plDefence.color}; font-weight: bold;'>[${plDefence.hp} / 100]</span>`;
-  
-  switch (type) {
-
-    case 'start':
-      textLog = logs.start
-        .replace('[time]', `${battleTime}`)
-        .replace('[player1]', `${plKickName}`)
-        .replace('[player2]', `${plDefenceName}`);
-      break;
-    // ? switch hit = [head, body, food]   
-    case 'hit': 
-      textLog = 
-        `${battleTime} ${logs[type][getRandom(logs[type].length) - 1]
-        .replace('[playerKick]', `${plKickName}`)
-        .replace('[playerDefence]', `${plDefenceName}`)
-        } ${kick} жизни  ${plDefenceHp}`;
-      break;
-
-    case 'defence': 
-      textLog = 
-        `${battleTime} ${logs[type][getRandom(logs[type].length) - 1]
-        .replace('[playerKick]', `${plKickName}`)
-        .replace('[playerDefence]', `${plDefenceName}`)} ${def} жизни  ${plDefenceHp}`;  
-      break;
-    
-    case 'end':
-      textLog = 
-        `${battleTime} ${logs[type][getRandom(logs[type].length) - 1]
-          .replace('[playerWins]', `${plKickName}`)
-          .replace('[playerLose]', `${plDefenceName}`)}`;
-      break;
-
-    case 'draw':
-      textLog = `${battleTime} ${logs[type]}`
-      break;
-
-    default: 
-  }
-  let el = `<p>${textLog}</p>`;
-  $chat.insertAdjacentHTML('afterbegin', el);
-}
+export const playerIcon = {
+  scorpion: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
+  kitana: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
+  liukang: 'http://reactmarathon-api.herokuapp.com/assets/liukang.gif',
+  sonya: 'http://reactmarathon-api.herokuapp.com/assets/sonya.gif',
+  subzero: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
+  orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
+};
