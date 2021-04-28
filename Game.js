@@ -38,7 +38,7 @@ export class Game {
       color: '#42DDF5',
       rootSelector: 'arenas',
     });
-    
+    obj_PLAYER_1.createPlayer();
     obj_PLAYER_2 = new Player({
       ...p2,
       player : 2,
@@ -46,11 +46,12 @@ export class Game {
       color : '#FFFF00',
       rootSelector: 'arenas',
     })
-
+    obj_PLAYER_2.createPlayer();
     console.log(obj_PLAYER_1, obj_PLAYER_2);
   }
 
-  
+
+
 
 
   // constructor (props) {

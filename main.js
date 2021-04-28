@@ -45,7 +45,7 @@ $formFight.addEventListener('submit', function (evt) {
   
   // let obj_enemyAttack = game.enemyAttack();
   // let obj_playerAttack = game.playerAttack();
-
+  console.log(game.enemyAttack());
   let obj_enemyAttack = REQUEST.getFightStats(game.enemyAttack());
   let obj_playerAttack = REQUEST.getFightStats( game.playerAttack());
   console.log(obj_playerAttack);
