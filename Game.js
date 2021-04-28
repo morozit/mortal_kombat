@@ -1,46 +1,45 @@
 import { createElement } from "./utils.js";
 import { randPowerHit, OPPONENT, LOGS } from "./constant.js";
-import { obj_PLAYER_1, obj_PLAYER_2 } from "./main.js";
+// import { obj_PLAYER_1, obj_PLAYER_2 } from "./main.js";
 import { $arenas, $fightButton, $formFight, $chat } from "./DOM.js";
 import { getRandom } from "./utils.js";
+import  REQUEST from "./FetchAPI.js";
 import Player from "./Player.js";
 
-let player1;
-let player2;
-console.log(player1, player2);
+
+let obj_PLAYER_1;
+let obj_PLAYER_2;
+
+
+const request = new REQUEST();
 
 export class Game {
   // в отдельний класс
   constructor(props) {
     this.baseUrl = "https://reactmarathon-api.herokuapp.com/api/mk";
-    this.player_1 = props.player_1;
-    this.player_2 = props.player_2;
-  }
-    getPlayers = async () => {
-    let body = fetch(`${this.baseUrl}/players`)
-      .then((response) => response.json());
-    return body;
   }
 
   start = async () => {
     $formFight.style.display = "none";
     this.createStartButton();
     
-    const players = await this.getPlayers();
+    const players = await request.getPlayers();
     console.log(players);
 
     const p1 = players[getRandom(players.length) - 1];
     const p2 = players[getRandom(players.length) - 1];
 
     console.log(p1, p2);
-    player1 = new Player({
+
+    obj_PLAYER_1 = new Player({
       ...p1,
       player: 1,
       kick: 0,
       color: '#42DDF5',
       rootSelector: 'arenas',
     });
-    player2 = new Player({
+    
+    obj_PLAYER_2 = new Player({
       ...p2,
       player : 2,
       kick : 0,
@@ -48,9 +47,7 @@ export class Game {
       rootSelector: 'arenas',
     })
 
-    // this.p1 = players[getRandom(players.length) - 1];
-    // this.p2 = players[getRandom(players.length) - 1];
-    // console.log(p1, p2);
+    console.log(obj_PLAYER_1, obj_PLAYER_2);
   }
 
   
@@ -65,6 +62,7 @@ export class Game {
   //   this.createStartButton();  
   // }
 
+  
   // !!!!  Кнопка Старт -------------------------
   createStartButton () {
     let $startBtnDiv = createElement('div', 'startWrap');

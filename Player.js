@@ -14,20 +14,6 @@ class Player {
 
   }
 
-  getPlayers = async () => {
-    let body = fetch(`${this.baseUrl}/players`)
-      .then((response) => response.json());
-    return body;
-  }
-
-  serverPlayer = async () => {
-    const players = await this.getPlayers();
-    console.log(players);
-
-    this.serverPlayer = players[getRandom(players.length) - 1];
-    // return this.serverPlayer;
-  }
-
   changeHP = (lostLife) => {
     this.hp -= lostLife;
     if (this.hp <= 0) {
@@ -78,13 +64,3 @@ class Player {
 }
 
 export default Player;
-
-  // constructor() {
-  //   this.baseUrl = "https://reactmarathon-api.herokuapp.com/api/mk";
-  // }
-
-  // getPlayers = async () => {
-  //   let body = fetch(`${this.baseUrl}/player/choose`)
-  //     .then((response) => response.json());
-  //   return body;
-  // }

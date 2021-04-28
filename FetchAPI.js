@@ -1,7 +1,7 @@
-import { Game } from "./Game.js";
+// import { Game } from "./Game.js";
 // import { obj_PLAYER_1, obj_PLAYER_2 } from "./main.js";
-import { $arenas, $fightButton, $formFight, $chat } from "./DOM.js";
-import Player from "./Player.js";
+// import { $arenas, $fightButton, $formFight, $chat } from "./DOM.js";
+// import Player from "./Player.js";
 
 class  REQUEST{
   constructor() {
@@ -14,47 +14,34 @@ class  REQUEST{
     return body;
   }
 
-  start = async () => {
-    $formFight.style.display = "none";
-    this.createStartButton();
-    // --
-    const players = await this.getPlayers();
-    console.log(players);
-
-    const p1 = players[getRandom(players.length) - 1];
-    const p2 = players[getRandom(players.length) - 1];
-    console.log(p1, p2);
+  getEnemyPlayer = async () => {
+    return await fetch(`${this.baseUrl}/player/choose`)
+      .then((response) =>
+          response.json()
+      )
+      .catch(error => console.error(error.message));
   }
 
-  // async getAllPlayers() {
-  //   console.log(getAllPlayers());
-  //   return await fetch(`${this.baseUrl}/players`).then((response) =>
-  //     response.json());
-    
-  // }
-  // console.log(getAllPlayers());
-
-
-
-  // async getEnemyPlayer() {
-  //   return await fetch(`${this.baseUrl}/player/choose`)
-  //     .then((response) =>
-  //         response.json()
-  //     )
-  //     .catch(error => console.error(error.message));
-  // }
-  // async getFightStats(payload) {
-  //   return await fetch(`${this.baseUrl}/player/fight`, {
-  //     method: "POST",
-  //     body: JSON.stringify({
-  //       hit: payload.hit,
-  //       defence: payload.defence,
-  //     }),
-  //   }).then((response) => response.json());
-  // }
+  getFightStats = async (props) => {
+    return await fetch(`${this.baseUrl}/player/fight`, {
+      method: "POST",
+      body: JSON.stringify({
+        hit: props.hit,
+        defence: props.defence,
+      }),
+    }).then((response) => response.json());
+  }
 }
 
-// export default REQUEST;
+export default REQUEST;
+
+
+
+
+
+
+
+
 
 
 // export const obj_PLAYER_1 = new Player({
