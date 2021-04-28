@@ -3,6 +3,18 @@ import  Player  from "./Player.js";
 import { playerIcon } from "./constant.js";
 // import { logicStrikes, enemyAttack, playerAttack} from "./logic_of_strikes.js";
 
+const PLAYERS = fetch('https://reactmarathon-api.herokuapp.com/api/mk/players')
+  .then(responce => {
+    return responce.json();
+  })
+  .then(data => {
+    console.log(data);
+  })
+  ;
+
+
+console.log(PLAYERS);
+
 export const obj_PLAYER_1 = new Player({
   player : 1,
   name : 'KITANA',
