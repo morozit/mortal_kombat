@@ -1,19 +1,16 @@
 import { Game } from "./Game.js";
-import  Player  from "./Player.js";
+import Player from "./Player.js";
+import { $arenas, $fightButton, $formFight, $chat } from "./DOM.js";
+// import  REQUEST from "./FetchAPI.js";
 import { playerIcon } from "./constant.js";
-// import { logicStrikes, enemyAttack, playerAttack} from "./logic_of_strikes.js";
-
-const PLAYERS = fetch('https://reactmarathon-api.herokuapp.com/api/mk/players')
-  .then(responce => {
-    return responce.json();
-  })
-  .then(data => {
-    console.log(data);
-  })
-  ;
 
 
-console.log(PLAYERS);
+// const request = new REQUEST();
+
+// request.getPlayers();
+// console.log(request.start());
+
+
 
 export const obj_PLAYER_1 = new Player({
   player : 1,
@@ -26,21 +23,17 @@ export const obj_PLAYER_1 = new Player({
 } );
 
 export const obj_PLAYER_2 = new Player({
-  player : 2,
-  name : 'SONYA',
-  img : playerIcon.sonya,
-  hp : 100,
-  kick : 0,
-  color : '#FFFF00',
+  player: 2,
+  name: 'SONYA',
+  img: playerIcon.sonya,
+  hp: 100,
+  kick: 0,
+  color: '#FFFF00',
   rootSelector: 'arenas',
 } );
 
-// ----------------DOM---------------------------
-export const $arenas = document.querySelector('.arenas');
-export const $fightButton = document.querySelector('.button');
-export const $formFight = document.querySelector('.control');
-export const $chat = document.querySelector('.chat');
 
+console.log(obj_PLAYER_1, obj_PLAYER_2);
 
 const game = new Game({
   player_1: obj_PLAYER_1.createPlayer(),
