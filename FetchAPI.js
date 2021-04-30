@@ -3,7 +3,7 @@
 // import { $arenas, $fightButton, $formFight, $chat } from "./DOM.js";
 // import Player from "./Player.js";
 
-class  REQUEST{
+class REQUEST {
   constructor() {
     this.baseUrl = "https://reactmarathon-api.herokuapp.com/api/mk";
   }
