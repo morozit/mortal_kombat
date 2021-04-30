@@ -57,23 +57,3 @@ export const playerIcon = {
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 };
 
-
-[
-  {
-    id: 'особовий рахунок',
-    name: 'ПІБ',
-    locality: 'населений пункт',
-    address: 'адреса (вулиця)',
-    balance: 'стан рахунку на початок місяця (борг/переплата)',
-    debt: 'до сплати',
-    cost: 'вартість газу на поточний місяць',
-    idicator: {
-      month: 'розрахунковий місяць',
-      amount: 'обсяг за місяць',
-    },
-    payments: {
-      dataPay: 'дата надходження',
-      sum: 'сума оплати',
-    }
-  }
-]
