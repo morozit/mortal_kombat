@@ -56,3 +56,4 @@ export const playerIcon = {
   subzero: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
   orco: 'https://www.fightersgeneration.com/nx/chars/kintaro-arcadestance.gif',
 };
+

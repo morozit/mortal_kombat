@@ -1,20 +1,69 @@
 import { createElement } from "./utils.js";
 import { randPowerHit, OPPONENT, LOGS } from "./constant.js";
-import { obj_PLAYER_1, obj_PLAYER_2, $arenas, $fightButton, $formFight, $chat } from "./main.js";
-
+// import { obj_PLAYER_1, obj_PLAYER_2 } from "./main.js";
+import { $arenas, $fightButton, $formFight, $chat } from "./DOM.js";
 import { getRandom } from "./utils.js";
+import  REQUEST from "./FetchAPI.js";
+import Player from "./Player.js";
 
+
+let obj_PLAYER_1;
+let obj_PLAYER_2;
+
+
+const request = new REQUEST();
 
 export class Game {
-  constructor (props) {
-    this.player_1 = props.player_1;
-    this.player_2 = props.player_2;
-  }
-  start = () => {
-    $formFight.style.display = "none";
-    this.createStartButton();  
+  // в отдельний класс
+  constructor(props) {
+    this.baseUrl = "https://reactmarathon-api.herokuapp.com/api/mk";
   }
 
+  start = async () => {
+    $formFight.style.display = "none";
+    this.createStartButton();
+    
+    const players = await request.getPlayers();
+    console.log(players);
+
+    const p1 = players[getRandom(players.length) - 1];
+    const p2 = players[getRandom(players.length) - 1];
+
+    console.log(p1, p2);
+
+    obj_PLAYER_1 = new Player({
+      ...p1,
+      player: 1,
+      kick: 0,
+      color: '#42DDF5',
+      rootSelector: 'arenas',
+    });
+    obj_PLAYER_1.createPlayer();
+    obj_PLAYER_2 = new Player({
+      ...p2,
+      player : 2,
+      kick : 0,
+      color : '#FFFF00',
+      rootSelector: 'arenas',
+    })
+    obj_PLAYER_2.createPlayer();
+    console.log(obj_PLAYER_1, obj_PLAYER_2);
+  }
+
+
+
+
+
+  // constructor (props) {
+  //   this.player_1 = props.player_1;
+  //   this.player_2 = props.player_2;
+  // }
+  // start = () => {
+  //   $formFight.style.display = "none";
+  //   this.createStartButton();  
+  // }
+
+  
   // !!!!  Кнопка Старт -------------------------
   createStartButton () {
     let $startBtnDiv = createElement('div', 'startWrap');
@@ -179,3 +228,4 @@ export class Game {
     return attack;
   }
 }
+

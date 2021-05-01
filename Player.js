@@ -10,6 +10,8 @@ class Player {
     this.color = props.color;
     this.selector = `player${this.player}`;
     this.rootSelector = props.rootSelector;
+    this.baseUrl = "https://reactmarathon-api.herokuapp.com/api/mk";
+
   }
 
   changeHP = (lostLife) => {
